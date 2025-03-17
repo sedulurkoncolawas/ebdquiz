@@ -10,8 +10,17 @@ const questions = [
     { text: "Siapa pendiri Eberardos?", options: ["Arya", "Ikram", "Ardi", "Faiz"], correct: 0 },
     { text: "Berapa umur Eberardos?", options: ["1 Tahun", "2 Tahun", "3 Tahun", "4 Tahun"], correct: 3 },
     { text: "Apa misi utama Eberardos?", options: ["Bantai salma", "Basmi jomok", "Bantai ikram😹"], correct: 0 },
-    { text: "Siapa yang dikenal dengan julukan 'Si Tukang DDoS' di Eberardos?", options: ["Faiz", "Ikram", "Ardi", "Ardan"], correct: 1 },
-    { text: "Siapa yang suka hapus pesan kalau Eberardos lagi ramai?", options: ["Ikram😹", "Jelas ikram lah", "Ikram sih😠", "Si negro tuh Ikram", "Ikrom cik"], correct: 0 }
+    { text: "Siapa yang dikenal dengan julukan ''Si Tukang DDoS'' di Eberardos?", options: ["Faiz", "Ikram", "Ardi", "Ardan"], correct: 1 },
+    { text: "Siapa yang suka hapus pesan kalau Eberardos lagi ramai?", options: ["Ikram😹", "Jelas ikram lah", "Ikram sih😠", "Si negro tuh Ikram", "Ikrom cik"], correct: 0 },
+     { text: "Siapa yang suka deface web?", options: ["Ikram & Faiz", "Haekal & Arya", "Ikram & Noe", "Ikram & Ardi"], correct: 3 },
+     { text: "Merek apa HP mas Arya?", 
+       options: ["Infinix Smart 8", "iPhone 16 Pro Max", "Vivo X200 Pro", "Samsung A55", "iQoo 13", "Poco X7 Pro", "Samsung J2 Prime"], correct: 0 },
+     { text: "Siapa sepuh bot di Eberardos?",
+     options: ["Ikram,Faiz & Salma", "Ponta,Rapik & Cifumo", "Ponta,Rapik,Cifumo & Ikram"], correct: 2 },
+    { text: "Siapa yang membuat web ini dan mengirim link webnya ke Eberardos?",
+     options: ["Ardan", "Ikram", "Salma", "Haekal"], correct: 0 },
+     { text: "Tahun berapa Eberardos dibuat?",
+       options: ["2020", "2021", "2022", "2023", "2024", "2025"], correct: 1 }
 ];
 
 // Mengecek apakah jumlah soal di Local Storage berbeda dengan jumlah soal sekarang
@@ -125,6 +134,8 @@ prevBtn.addEventListener("click", () => {
 });
 
 function submitQuiz() {
+    nextBtn.disabled = true; // Mencegah tombol diklik lebih dari sekali
+
     let message = `📢 *Eberardos Quiz Submission*\n\n👤 *Nama:* ${userName}\n\n`;
 
     questions.forEach((q, i) => {
@@ -166,6 +177,8 @@ function submitQuiz() {
             title: "Gagal Mengirim!",
             text: "Terjadi kesalahan, coba lagi nanti.",
             confirmButtonText: "OK"
+        }).then(() => {
+            nextBtn.disabled = false; // Mengaktifkan kembali tombol jika gagal
         });
     });
 }
