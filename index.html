@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta property="og:image" content="https://b.top4top.io/p_336390ic10.jpg">
+    <link rel="shortcut icon" href="https://k.top4top.io/p_33631w5c20.jpg" type="image/x-icon" />
+    <meta property="og:description" content="Gabut? mending lu isi kuis Eberardos dah">
+    <title>Eberardos Quiz</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div id="name-screen">
+        <h2>Masukkan Nama</h2>
+        <input type="text" id="user-name" placeholder="Nama Anda" oninput="capitalizeFirstLetter(this)">
+        <button id="start-btn">Mulai Kuis</button>
+    </div>
+
+    <div id="quiz-screen" style="display: none;">
+        <div id="loading-screen">Memuat soal...</div>
+        <h3 id="question-number"></h3>
+        <p id="question-text"></p>
+        <div id="options"></div>
+        <button id="prev-btn" style="display: none;"><</button>
+        <button id="next-btn">></button>
+    </div>
+        <footer>&copy; Eberárdoⲋ</footer>
+    <script src="script.js"></script>
+</body>
+</html>

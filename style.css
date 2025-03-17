@@ -1,0 +1,166 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: #222;
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* Name Input Screen */
+#name-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+input {
+    width: 250px;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #444;
+    border-radius: 8px;
+    background: #333;
+    text-transform: capitalize;
+    color: white;
+    outline: none;
+    transition: 0.3s;
+    text-align: center;
+}
+
+input:focus {
+    border-color: #00bfff;
+    background: #2a2a2a;
+}
+
+#start-btn {
+    margin-top: 15px;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: #00bfff;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#start-btn:hover {
+    background: #009acd;
+}
+
+/* Quiz Screen */
+#quiz-screen {
+    display: none;
+    padding: 20px;
+}
+
+/* Loading Effect */
+#loading-screen {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Question Number */
+#question-number {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+/* Question Text */
+#question-text {
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+/* Answer Options */
+#options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    background: #333;
+    padding: 12px 20px;
+    width: 250px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.option:hover {
+    background: #444;
+}
+
+.option.selected {
+    border-color: #00bfff;
+    background: #2a2a2a;
+}
+
+.option-circle {
+    width: 30px;
+    height: 30px;
+    background: #555;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.option.selected .option-circle {
+    background: #00bfff;
+}
+
+/* Navigation Buttons */
+#prev-btn, #next-btn {
+    margin-top: 20px;
+    padding: 12px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    background: #00bfff;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#prev-btn:hover, #next-btn:hover {
+    background: #009acd;
+}
+
+#prev-btn {
+    margin-right: 10px;
+}
+
+footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #3b3b3b;
+            color: #888;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
