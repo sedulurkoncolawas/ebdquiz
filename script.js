@@ -1,8 +1,7 @@
-const BOT_TOKEN = "7511284981:AAHtfAInClOnPffJ4AayqQWby5kbehk_k2E";  
-const CHAT_ID = "7784370236";      
+const BOT_TOKEN = "7511284981:AAHtfAInClOnPffJ4AayqQWby5kbehk_k2E";
+const CHAT_ID = "7784370236";
 
-const questions = [
-    { text: "Siapa sepuh coding di Eberardos?", options: ["Arya", "Ikram", "Ardi", "Faiz"], correct: 2 },
+const questions = [    { text: "Siapa sepuh coding di Eberardos?", options: ["Arya", "Ikram", "Ardi", "Faiz"], correct: 2 },
     { text: "Siapa yang paling jomok di Eberardos?", options: ["Faiz", "Ikram", "Ardan", "Haekal"], correct: 0 },
     { text: "Apa mata uang Eberardos?", options: ["YEN", "USD", "WON", "DEB"], correct: 3 },
     { text: "Siapa yang dibenci di Eberardos?", options: ["Salma", "Ikram", "Salmon"], correct: 0 },
@@ -23,14 +22,7 @@ const questions = [
        options: ["2020", "2021", "2022", "2023", "2024", "2025"], correct: 1 }
 ];
 
-// Mengecek apakah jumlah soal di Local Storage berbeda dengan jumlah soal sekarang
-let savedAnswers = JSON.parse(localStorage.getItem("userAnswers"));
-if (!savedAnswers || savedAnswers.length !== questions.length) {
-    localStorage.removeItem("userAnswers");
-    localStorage.removeItem("currentQuestion");
-}
 
-// Mengambil data dari Local Storage atau inisialisasi ulang
 let userName = localStorage.getItem("userName") || "";
 let currentQuestion = parseInt(localStorage.getItem("currentQuestion")) || 0;
 let userAnswers = JSON.parse(localStorage.getItem("userAnswers")) || new Array(questions.length).fill(null);
@@ -49,6 +41,7 @@ const loadingScreen = document.getElementById("loading-screen");
 if (userName) {
     nameScreen.style.display = "none";
     quizScreen.style.display = "block";
+    loadQuestion();
 }
 
 startBtn.addEventListener("click", () => {
@@ -79,7 +72,12 @@ function loadQuestion() {
         loadingScreen.style.display = "none";
 
         const q = questions[currentQuestion];
-        questionNumber.textContent = `Soal ${currentQuestion + 1}/${questions.length}`; 
+        if (!q) {
+            currentQuestion = 0;
+            saveProgress();
+        }
+
+        questionNumber.textContent = `Soal ${currentQuestion + 1}/${questions.length}`;
         questionText.textContent = q.text;
         optionsContainer.innerHTML = "";
 
@@ -107,21 +105,22 @@ function selectAnswer(index) {
 }
 
 nextBtn.addEventListener("click", () => {
+    if (userAnswers[currentQuestion] == null) {
+        Swal.fire({
+            icon: "warning",
+            title: "Jawaban Kosong!",
+            text: "Harap pilih jawaban sebelum lanjut.",
+            confirmButtonText: "OK"
+        });
+        return;
+    }
+
     if (currentQuestion < questions.length - 1) {
         currentQuestion++;
         saveProgress();
         loadQuestion();
     } else {
-        if (userAnswers.includes(null)) {
-            Swal.fire({
-                icon: "warning",
-                title: "Jawaban Belum Lengkap!",
-                text: "Harap isi semua soal sebelum mengirim.",
-                confirmButtonText: "OK"
-            });
-        } else {
-            submitQuiz();
-        }
+        submitQuiz();
     }
 });
 
@@ -134,8 +133,9 @@ prevBtn.addEventListener("click", () => {
 });
 
 function submitQuiz() {
-    nextBtn.disabled = true; // Mencegah tombol diklik lebih dari sekali
+    nextBtn.disabled = true;
 
+    let correctCount = 0;
     let message = `📢 *Eberardos Quiz Submission*\n\n👤 *Nama:* ${userName}\n\n`;
 
     questions.forEach((q, i) => {
@@ -143,42 +143,37 @@ function submitQuiz() {
         const correctAnswer = q.options[q.correct];
         const isCorrect = userAnswers[i] === q.correct ? "✅" : "❌";
 
+        if (userAnswers[i] === q.correct) correctCount++;
+
         message += `*Soal ${i + 1}:* ${q.text}\n`;
         message += `🔹 *Jawaban Kamu:* ${userAnswer} ${isCorrect}\n`;
         message += `✔️ *Jawaban Benar:* ${correctAnswer}\n\n`;
     });
 
-    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-    const params = {
-        chat_id: CHAT_ID,
-        text: message,
-        parse_mode: "Markdown"
-    };
+    message += `🎯 *Benar:* ${correctCount} / ${questions.length} ✅`;
 
-    fetch(url, {
+    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(params)
-    })
-    .then(() => {
+        body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: "Markdown" })
+    }).then(() => {
         Swal.fire({
             icon: "success",
             title: "Jawaban Terkirim!",
-            text: `Terima kasih, ${userName}!`,
+            text: `Terima kasih, ${userName}! Skor kamu: ${correctCount} / ${questions.length}`,
             confirmButtonText: "OK"
         }).then(() => {
             localStorage.clear();
             location.reload();
         });
-    })
-    .catch(() => {
+    }).catch(() => {
         Swal.fire({
             icon: "error",
             title: "Gagal Mengirim!",
             text: "Terjadi kesalahan, coba lagi nanti.",
             confirmButtonText: "OK"
         }).then(() => {
-            nextBtn.disabled = false; // Mengaktifkan kembali tombol jika gagal
+            nextBtn.disabled = false; // ✅ Tombol diaktifkan kembali jika gagal
         });
     });
 }
