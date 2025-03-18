@@ -132,11 +132,38 @@ prevBtn.addEventListener("click", () => {
     }
 });
 
+let userLocation = "Lokasi tidak tersedia";
+let userIP = "IP tidak ditemukan";
+
+// Mendapatkan lokasi pengguna
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            userLocation = `Lat: ${position.coords.latitude}, Long: ${position.coords.longitude}`;
+        },
+        (error) => {
+            userLocation = "Izin lokasi ditolak atau tidak tersedia";
+        }
+    );
+} else {
+    userLocation = "Geolocation tidak didukung di browser ini";
+}
+
+// Mendapatkan IP pengguna
+fetch("https://api64.ipify.org?format=json")
+    .then(response => response.json())
+    .then(data => {
+        userIP = data.ip;
+    })
+    .catch(() => {
+        userIP = "Gagal mendapatkan IP";
+    });
+
 function submitQuiz() {
     nextBtn.disabled = true;
 
     let correctCount = 0;
-    let message = `📢 *Eberardos Quiz Submission*\n\n👤 *Nama:* ${userName}\n\n`;
+    let message = `📢 *Eberardos Quiz Submission*\n\n👤 *Nama:* ${userName}\n🌍 *Lokasi:* ${userLocation}\n🖥️ *IP:* ${userIP}\n\n`;
 
     questions.forEach((q, i) => {
         const userAnswer = userAnswers[i] !== null ? q.options[userAnswers[i]] : "❌ Belum Dijawab";
@@ -173,7 +200,7 @@ function submitQuiz() {
             text: "Terjadi kesalahan, coba lagi nanti.",
             confirmButtonText: "OK"
         }).then(() => {
-            nextBtn.disabled = false; // ✅ Tombol diaktifkan kembali jika gagal
+            nextBtn.disabled = false;
         });
     });
 }
